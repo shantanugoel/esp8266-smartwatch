@@ -8,6 +8,7 @@
 #include "user_config.h"
 #include "config.h"
 #include "driver/uart.h"
+#include "ntp.h"
 
 struct espconn *pMqttConn;
 os_timer_t japDelayChack;
@@ -30,7 +31,7 @@ static char mqtt_topic[3][64];
 uint8_t mqtt_user[] = MQTT_USER;
 uint8_t mqtt_pass[] = MQTT_PASS;
 
-uint16_t keepAlive = 120;
+uint16_t keepAlive = 50; //Should be made configurable. For thingfabric, it should be <60
 uint32_t keepAliveTick = 0;
 uint32_t reconnectCounter = 0;
 uint32_t mqttConnected = 0, mqttConnectCouter = 0;
@@ -132,6 +133,7 @@ static void ICACHE_FLASH_ATTR wifi_check_ip(void *arg)
 			connState = WIFI_CONNECTED;
 
 			INFO("Wifi connected\r\n");
+      ntp_get_time();
 		} else if(connState == WIFI_CONNECTED && mqttConnected == 0){
 			if(mqttConnectCouter < MQTT_CONNTECT_TIMER){
 				mqttConnectCouter ++;
@@ -264,7 +266,7 @@ static void deliver_publish(mqtt_state_t* state, uint8_t* message, int length)
 		strcpy(infomsg,buff);
 		OLED_Print(0, 7, "                    ", 1);
 		OLED_Print(0, 7, infomsg, 1);
-	} else if ((strcmp(topic,(uint8_t*)"me/phone"))==0) {
+	} else if ((strcmp(topic,(uint8_t*)"6lklbarm9235626/me/phone"))==0) {
 		strcpy(infomsg,buff);
 		OLED_Print(0, 7, "                    ", 1);
 		OLED_Print(0, 7, infomsg, 1);
@@ -507,6 +509,7 @@ void ICACHE_FLASH_ATTR
 MQTT_Task(os_event_t *events)
 {
 	struct station_config stationConf;
+  unsigned char port[8];
 	INFO(".");
 
 	switch(connState){
@@ -552,6 +555,8 @@ MQTT_Task(os_event_t *events)
 		else {
 			INFO("CONNECT TO HOST:");
 			INFO(sysCfg.mqtt_host);
+      os_sprintf(port, "%d", sysCfg.mqtt_port);
+			INFO(port);
 			INFO("\r\n");
 			espconn_gethostbyname(pCon, sysCfg.mqtt_host, &mqtt_ip, mqtt_dns_found);
 			connState = DNS_RESOLVE;
@@ -591,7 +596,7 @@ void MQTT_Start()
 	connState = WIFI_INIT;
 	os_sprintf(client_id, MQTT_CLIENT_ID, sysCfg.device_id);	//MQTT client id
 
-	os_sprintf(mqtt_topic[0], "me/phone");  // 1st topic to subscribe to
+	os_sprintf(mqtt_topic[0], "6lklbarm9235626/me/phone");  // 1st topic to subscribe to
 
 	os_sprintf(pub_topic, "/%08X/send", sysCfg.device_id);		// send data to topic: /chipid/send
 

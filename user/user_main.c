@@ -19,16 +19,16 @@ static volatile bool OLED;
 
 void user_init(void)
 {
-	uart_init(BIT_RATE_115200, BIT_RATE_115200);
-	os_delay_us(1000000);
+  uart_init(BIT_RATE_115200, BIT_RATE_115200);
+  os_delay_us(1000000);
 
-  	i2c_init();
-  	OLED = OLED_Init();
+  i2c_init();
+  OLED = OLED_Init();
 
-	OLED_Print(2, 0, "ESP MQTT OLED", 1);
+  OLED_Print(2, 0, "ESP MQTT OLED", 1);
 
-	wifi_set_opmode(STATION_MODE);
-	CFG_Load();
-	MQTT_Start();
-	INFO("\r\nSystem started ...\r\n");
+  wifi_set_opmode(STATION_MODE);
+  CFG_Load();
+  MQTT_Start();
+  INFO("\r\nSystem started ...\r\n");
 }

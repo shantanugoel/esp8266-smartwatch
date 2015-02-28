@@ -1,6 +1,12 @@
-**esp_mqtt_oled**
+**esp_smartwatch**
 =============
-This combines Tuan PM's port of the [MQTT client library for ESP8266](https://github.com/tuanpmt/esp_mqtt), ported from: [MQTT client library for Contiki](https://github.com/adamrenner/mqtt-sn-tools-contiki), zarya's [I2C driver](https://github.com/zarya/esp8266_i2c_driver) and the [OLED driver here](http://www.esp8266.com/viewtopic.php?p=4311#p4311) to make a WiFi MQTT display.
+This project is for a smartwatch based on ESP8266. This software repository consists the following development:
+- Modify and refactor Tuan PM's port of the [MQTT client library for ESP8266](https://github.com/tuanpmt/esp_mqtt)
+- Use zarya's [I2C driver](https://github.com/zarya/esp8266_i2c_driver)
+- Modify and refactor the [OLED driver here](http://www.esp8266.com/viewtopic.php?p=4311#p4311)
+- Add an NTP driver and a client
+
+The aim is to build an extensible smartwatch framework which is easily configurable
 
 It subscribes to three MQTT topics and displays them on the OLED, the display I am using is [this 0.96" 128x64 White OLED](http://www.banggood.com/0_96-Inch-4Pin-White-IIC-I2C-OLED-Display-Module-12864-LED-For-Arduino-p-958196.html) but similar displays are widely available (plenty on eBay).
 
