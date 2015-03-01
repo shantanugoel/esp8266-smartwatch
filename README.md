@@ -1,14 +1,22 @@
-**esp_smartwatch**
+**esp8266-smartwatch**
 =============
-This project is for a smartwatch based on ESP8266. This software repository consists the following development:
+This project is by [Shantanu Goel](http://tech.shantanugoel.com/) for a smartwatch based on ESP8266. This software repository consists the following development:
 - Modify and refactor Tuan PM's port of the [MQTT client library for ESP8266](https://github.com/tuanpmt/esp_mqtt)
 - Use zarya's [I2C driver](https://github.com/zarya/esp8266_i2c_driver)
-- Modify and refactor the [OLED driver here](http://www.esp8266.com/viewtopic.php?p=4311#p4311)
+- Modify and refactor this [OLED driver](http://www.esp8266.com/viewtopic.php?p=4311#p4311)
 - Add an NTP driver and a client
 
 The aim is to build an extensible smartwatch framework which is easily configurable
 
-It subscribes to three MQTT topics and displays them on the OLED, the display I am using is [this 0.96" 128x64 White OLED](http://www.banggood.com/0_96-Inch-4Pin-White-IIC-I2C-OLED-Display-Module-12864-LED-For-Arduino-p-958196.html) but similar displays are widely available (plenty on eBay).
+I'm using a 0.96" 128x64 OLED which is easily available from ebay or other electronic shops
+
+**Current Status**
+- Subscribes to an MQTT topic and displays it on the OLED
+-- Using this with tasker on phone and [ThingFabric](http://www.thingfabric.com) to send phone notifications to the watch
+- Gets the current time from NTP server at boot up and displays on the OLED
+
+**Changelog**
+Check commit history
 
 **Configuration**
 * I2C address for the OLED is in include/driver/i2c_oled.h
@@ -16,7 +24,13 @@ It subscribes to three MQTT topics and displays them on the OLED, the display I 
 * GPIO pins to use for I2C are in driver/i2c.h
 * MQTT topics to subscribe to are in the MQTT_Start() function in user/mqtt.c
 * What to do with the incoming messages is defined in deliver_publish() in user/mqtt.c
+* NTP server IP address is in user/ntp.c
 
-If you want to add more than 3 topics you need to change MQTT_SUB_TOPIC_NUM in user_config.h and the mqtt_topic variable declaration near the top of mqtt.c
-
-I haven't tested the Windows Makefile, it is as it comes with the MQTT demo.
+**TODO**
+- Build clock function on top of the ntp client to update display with latest time
+- Refactor MQTT code and segregate wifi and ntp/clock management from it
+- Refactor OLED code to better manage all the different writes ongoing and prevent a write wiping out other things on display
+- Add framework to configure things for individual users without having to recompile the code
+- Add watchfaces (wishlist)
+- Add buttons support to take actions on the watch
+- Add communication support from watch to phone
