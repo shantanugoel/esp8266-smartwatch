@@ -46,7 +46,7 @@ ntp_udpclient_recv(void *arg, char *pdata, unsigned short len)
   timestamp =  timestamp - NTP_OFFSET;
   dt = localtime((time_t *) &timestamp);
   os_sprintf(timestr, "%d:%d:%d", dt->tm_hour, dt->tm_min, dt->tm_sec);
-  OLED_Print(0, 2, timestr, 1);
+  OLED_Print(4, 2, timestr, 1);
 }
 
 void ntp_send_request()

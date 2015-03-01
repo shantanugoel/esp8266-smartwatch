@@ -25,7 +25,7 @@ void user_init(void)
   i2c_init();
   OLED = OLED_Init();
 
-  OLED_Print(2, 0, "ESP MQTT OLED", 1);
+  OLED_Print(2, 0, "ESP8266 SMARTWATCH", 1);
 
   wifi_set_opmode(STATION_MODE);
   CFG_Load();
