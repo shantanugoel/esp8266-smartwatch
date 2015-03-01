@@ -1,5 +1,4 @@
 #esp8266-smartwatch
-=============
 This project is by [Shantanu Goel](http://tech.shantanugoel.com/) for a smartwatch based on ESP8266. This software repository consists the following development:
 * Modify and refactor Tuan PM's port of the [MQTT client library for ESP8266](https://github.com/tuanpmt/esp_mqtt)
 * Use zarya's [I2C driver](https://github.com/zarya/esp8266_i2c_driver)
@@ -21,7 +20,6 @@ The aim is to build an extensible smartwatch framework which is easily configura
 * Gets the current time from NTP server at boot up and displays on the OLED
 
 ##Changelog
-
 Check commit history
 
 ##Configuration
@@ -33,6 +31,7 @@ Check commit history
 * NTP server IP address is in user/ntp.c
 
 ##TODO
+* Decouple OLED code from ntp
 * Build clock function on top of the ntp client to update display with latest time
 * Refactor MQTT code and segregate wifi and ntp/clock management from it
 * Refactor OLED code to better manage all the different writes ongoing and prevent a write wiping out other things on display
