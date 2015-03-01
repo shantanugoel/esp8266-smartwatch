@@ -29,6 +29,7 @@ void ntp_udpclient_recv(void *arg, char *pdata, unsigned short len);
 void ICACHE_FLASH_ATTR
 ntp_udpclient_sent_cb(void *arg)
 {
+  //Causing Crash. To be fixed
   //espconn_delete(pCon);
   //os_free(pCon->proto.udp);
   //os_free(pCon);
@@ -37,27 +38,15 @@ ntp_udpclient_sent_cb(void *arg)
 void ICACHE_FLASH_ATTR
 ntp_udpclient_recv(void *arg, char *pdata, unsigned short len)
 {
-  //uint8 time[64];
   struct tm *dt;
   char timestr[11];
-  // combine the four bytes (two words) into a long integer
   // this is NTP time (seconds since Jan 1 1900):
   unsigned long timestamp = pdata[40] << 24 | pdata[41] << 16 |
     pdata[42] << 8 | pdata[43];
-  //os_sprintf(time, "%lu", timestamp);
-  //INFO("\r\nTime: ");
-  //INFO(time);
   timestamp =  timestamp - NTP_OFFSET;
-  INFO("\r\n1");
   dt = localtime((time_t *) &timestamp);
-  INFO("\r\n2");
-  //strftime(timestr, sizeof(timestr), "%m%d%H%M%y", dt);
   os_sprintf(timestr, "%d:%d:%d", dt->tm_hour, dt->tm_min, dt->tm_sec);
-  INFO("\r\n3");
-  INFO(timestr);
-  INFO("\r\n4");
   OLED_Print(0, 2, timestr, 1);
-  INFO("\r\n5");
 }
 
 void ntp_send_request()
@@ -80,7 +69,7 @@ void ntp_send_request()
   // all NTP fields have been given values, now
   // you can send a packet requesting a timestamp:
   espconn_create(pCon);
-  espconn_regist_recvcb(pCon, ntp_udpclient_recv);////////
-  espconn_regist_sentcb(pCon, ntp_udpclient_sent_cb);///////
+  espconn_regist_recvcb(pCon, ntp_udpclient_recv);
+  espconn_regist_sentcb(pCon, ntp_udpclient_sent_cb);
   espconn_sent(pCon, packetBuffer, NTP_PACKET_SIZE);
 }
