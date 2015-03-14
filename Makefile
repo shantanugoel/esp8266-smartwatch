@@ -26,7 +26,7 @@ ESPPORT		?= /dev/ttyUSB2
 TARGET		= app
 
 # which modules (subdirectories) of the project to include in compiling
-MODULES		= driver user
+MODULES		= driver user mqtt/mqtt mqtt/modules
 EXTRA_INCDIR    = include $(SDK_BASE)/../include
 
 # libraries used in this project, mainly provided by the SDK

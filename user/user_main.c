@@ -29,6 +29,6 @@ void user_init(void)
 
   wifi_set_opmode(STATION_MODE);
   CFG_Load();
-  MQTT_Start();
-  INFO("\r\nSystem started ...\r\n");
+  //MQTT_Start();
+  //INFO("\r\nSystem started ...\r\n");
 }
