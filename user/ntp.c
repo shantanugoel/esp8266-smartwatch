@@ -14,7 +14,7 @@ uint8 packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming and outgoing pack
 struct espconn *pCon;
 
 
-unsigned long ntp_get_time()
+void ntp_get_time()
 {
   pCon = (struct espconn *)os_zalloc(sizeof(struct espconn));
   pCon->type = ESPCONN_UDP;

@@ -10,7 +10,7 @@
 #define MQTT_BUF_SIZE	1024
 #define MQTT_KEEPALIVE		50	 /*second*/
 
-#define MQTT_CLIENT_ID		"ESP8266_%8X"
+#define MQTT_CLIENT_ID		"ESP8266_%7X"
 #define MQTT_USER		"MQTTUSER"
 #define MQTT_PASS		"MQTTPASS"
 #define MQTT_SUB_TOPIC_NUM	1

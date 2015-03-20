@@ -13,6 +13,7 @@
 #include "driver/uart.h"
 #include "driver/i2c.h"
 #include "driver/i2c_oled.h"
+#include "ntp.h"
 
 extern void ets_wdt_disable(void);
 
@@ -23,6 +24,7 @@ void wifiConnectCb(uint8_t status)
 {
   if(status == STATION_GOT_IP){
     MQTT_Connect(&mqttClient);
+    ntp_get_time();
   } else {
     MQTT_Disconnect(&mqttClient);
   }
@@ -31,13 +33,9 @@ void mqttConnectedCb(uint32_t *args)
 {
   MQTT_Client* client = (MQTT_Client*)args;
   INFO("MQTT: Connected\r\n");
-  MQTT_Subscribe(client, "/mqtt/topic/0", 0);
-  MQTT_Subscribe(client, "/mqtt/topic/1", 1);
-  MQTT_Subscribe(client, "/mqtt/topic/2", 2);
+  MQTT_Subscribe(client, "6lklbarm9235626/me/phone", 0);
 
-  MQTT_Publish(client, "/mqtt/topic/0", "hello0", 6, 0, 0);
-  MQTT_Publish(client, "/mqtt/topic/1", "hello1", 6, 1, 0);
-  MQTT_Publish(client, "/mqtt/topic/2", "hello2", 6, 2, 0);
+  //MQTT_Publish(client, "/mqtt/topic/0", "hello0", 6, 0, 0);
 
 }
 
@@ -67,6 +65,7 @@ void mqttDataCb(uint32_t *args, const char* topic, uint32_t topic_len, const cha
   dataBuf[data_len] = 0;
 
   INFO("Receive topic: %s, data: %s \r\n", topicBuf, dataBuf);
+  OLED_Print(0, 7, "%s\r\n", dataBuf);
   os_free(topicBuf);
   os_free(dataBuf);
 }
@@ -80,15 +79,14 @@ void user_init(void)
   i2c_init();
   OLED = OLED_Init();
 
+  INFO("\r\nBegin...\r\n");
   OLED_Print(2, 0, "ESP8266 SMARTWATCH", 1);
 
   CFG_Load();
 
   MQTT_InitConnection(&mqttClient, sysCfg.mqtt_host, sysCfg.mqtt_port, sysCfg.security);
-  //MQTT_InitConnection(&mqttClient, "192.168.11.122", 1880, 0);
 
   MQTT_InitClient(&mqttClient, sysCfg.device_id, sysCfg.mqtt_user, sysCfg.mqtt_pass, sysCfg.mqtt_keepalive, 1);
-  //MQTT_InitClient(&mqttClient, "client_id", "user", "pass", 120, 1);
 
   MQTT_InitLWT(&mqttClient, "/lwt", "offline", 0, 0);
   MQTT_OnConnected(&mqttClient, mqttConnectedCb);
